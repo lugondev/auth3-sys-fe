@@ -26,17 +26,13 @@ export default function ProtectedWrapper({children}: {children: React.ReactNode}
 		setIsCheckingAuth(false)
 	}, [user, loading, isAuthenticated, router, pathname])
 
+	// During initial auth check, render children to maintain layout
+	// The layout components will handle their own loading states
 	if (isCheckingAuth) {
-		return (
-			<div className='flex h-screen items-center justify-center'>
-				<div className='animate-pulse space-y-4'>
-					<div className='h-4 w-[200px] rounded bg-muted'></div>
-					<div className='h-4 w-[160px] rounded bg-muted'></div>
-				</div>
-			</div>
-		)
+		return <>{children}</>
 	}
 
+	// Not authenticated and not loading anymore - layout components will handle redirection
 	if (!isAuthenticated && !loading) {
 		return null
 	}
